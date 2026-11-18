@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Succ Ninja — Cancel Lab</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#0c101a;--panel:#141b29;--panel2:#1a2334;--border:#2a354b;--text:#edf2fc;--muted:#93a4c1;--green:#42d99e;--red:#ff7386;--blue:#6daaff;--gold:#f4c579}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,Arial}button,input,select,textarea{font:inherit}button{cursor:pointer;color:var(--text);border:1px solid var(--border);border-radius:9px;background:var(--panel2);padding:8px 11px}button:hover{border-color:#547195;background:#243147}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #8fbdff}header{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:center;background:#101725}header h1{margin:0;font-size:17px;letter-spacing:-.3px}header small{color:var(--muted);display:block;font-size:11px;margin-top:2px}header .actions{display:flex;gap:7px;flex-wrap:wrap}main{display:grid;grid-template-columns:265px minmax(300px,1fr) 305px;min-height:calc(100vh - 70px)}aside{background:var(--panel);padding:17px;overflow:auto}aside.left{border-right:1px solid var(--border)}aside.right{border-left:1px solid var(--border)}.section{margin-bottom:24px}.section h2{font-size:11px;letter-spacing:1.2px;color:#8d9fb9;text-transform:uppercase;margin:0 0 13px}.check{display:flex;gap:10px;align-items:center;padding:8px 4px;cursor:pointer}.check input{accent-color:#73aafa;width:15px;height:15px}.dot{width:9px;height:9px;display:inline-block;border-radius:20px;flex-shrink:0}.check .hint{color:var(--muted);font-size:11px;margin-left:auto}.sub{font-size:12px;color:var(--muted)}.field{display:block;width:100%;background:#0e1421;color:var(--text);border:1px solid #32415a;border-radius:8px;padding:10px;margin:8px 0}.full{width:100%}.canvas{position:relative;min-height:620px;background:radial-gradient(ellipse at 50% 48%,#182238 0%,#0b111c 76%)}#network{position:absolute;inset:0}.canvas-top{position:absolute;z-index:1;pointer-events:none;top:15px;left:16px;display:flex;gap:8px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid #334158;border-radius:20px;background:#111a28df;color:#aebdd3;padding:6px 10px}.canvas-bottom{position:absolute;z-index:1;pointer-events:none;left:16px;bottom:14px;color:#8092ac;font-size:11px}.skillhead{border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:17px}h3{margin:0 0 6px;font-size:21px;letter-spacing:-.5px}.tag{display:inline-block;border:1px solid #3d4b66;color:#a8b9d5;border-radius:20px;padding:3px 9px;font-size:11px}.connection{background:#111927;border:1px solid var(--border);padding:11px;margin:8px 0;border-radius:10px}.connection strong{display:block;font-size:12px}.connection small{display:block;color:var(--muted);margin-top:3px;font-size:11px}.connection button{margin-top:8px;font-size:11px;padding:4px 8px}.empty{color:#7f91af;font-size:12px;padding:12px;background:#101725;border:1px dashed #344057;border-radius:9px}.mini{font-size:11px;color:var(--muted)}.route{margin:7px 0;padding:10px;background:#101725;border:1px solid #2d3c53;border-radius:8px;font-size:12px;line-height:1.7}.route button{font-size:11px;padding:3px 7px;margin-top:6px}.header2{font-size:14px;font-weight:700;margin:0 0 8px}.legend{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:12px;color:#aebdd3}.line{height:2px;width:24px}.notice{border:1px solid #635035;color:#e6c591;background:#292114;padding:11px;border-radius:9px;font-size:11px}.modal{position:fixed;inset:0;z-index:20;background:#05070ad9;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.dialog{background:var(--panel);border:1px solid #44546c;max-width:790px;width:100%;border-radius:14px;padding:20px}.dialog textarea{width:100%;height:320px;resize:vertical;background:#090e18;color:#d8eaff;border:1px solid #384862;border-radius:8px;padding:13px;font:12px/1.6 ui-monospace,Consolas,monospace}.dialog .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.dialog .bar h3{font-size:17px}.error{color:#ff8392;font-size:12px;min-height:18px}.buttons{display:flex;gap:7px;flex-wrap:wrap}.routeResults{margin-top:14px}.status{font-size:11px;color:var(--muted);margin-top:7px}.mode{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.mode button{font-size:11px;padding:9px 4px}.mode button.active{background:#29446b;border-color:#6aa6fc;color:#e8f1ff}#disabled{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:#0b111c;color:#f7d7a1;z-index:5;text-align:center;padding:20px}@media(max-width:1020px){main{grid-template-columns:220px minmax(280px,1fr)}aside.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--border)}.canvas{min-height:570px}}@media(max-width:640px){main{display:flex;flex-direction:column}aside.left{order:1;border-right:0;border-bottom:1px solid var(--border)}.canvas{order:2;min-height:450px}.right{order:3}header{align-items:start;flex-direction:column}.section{margin-bottom:14px}.check{display:inline-flex;margin-right:10px}}
+</style></head><body>
+<header><div><h1>◈ Succ Ninja <span style="color:#78aaff">Cancel Lab</span></h1><small>Skills · animation cancels · movement chains · interactive graph</small></div><div class="actions"><button id="btnFit">⊞ Fit</button><button id="btnPhysics">◉ Physics: on</button><button id="btnData">{ } Edit data</button><button id="btnExport">↓ Export JSON</button></div></header>
+<main><aside class="left">
+<div class="section"><h2>View</h2><div class="mode"><button class="active" data-mode="all">All</button><button data-mode="cancels">Cancels</button><button data-mode="movement">Movement</button></div></div>
+<div class="section"><h2>Filter connections</h2>
+<label class="check"><input type="checkbox" id="into" checked><i class="dot" style="background:var(--green)"></i>Cancel into <span class="hint">startup</span></label>
+<label class="check"><input type="checkbox" id="out" checked><i class="dot" style="background:var(--red)"></i>Cancel out <span class="hint">recovery</span></label>
+<label class="check"><input type="checkbox" id="flow" checked><i class="dot" style="background:var(--blue)"></i>Movement flow <span class="hint">chain</span></label>
+<label class="check"><input type="checkbox" id="labels" checked>Show skill names</label>
+<label class="check"><input type="checkbox" id="arrows" checked>Show arrows</label>
+</div>
+<div class="section"><h2>Find skill</h2><input class="field" id="search" placeholder="e.g. Ghost Step…"><button id="btnReset" class="full">Clear selection</button></div>
+<div class="section"><h2>Find chains</h2><select id="from" class="field"></select><select id="to" class="field"></select><button id="btnRoutes" class="full">Find chains →</button><div id="routes" class="routeResults"></div></div>
+<div class="section"><h2>Legend</h2><div class="legend"><span class="line" style="background:var(--green)"></span>Speeds up next skill startup</div><div class="legend"><span class="line" style="background:var(--red)"></span>Interrupts previous skill</div><div class="legend"><span class="line" style="background:var(--blue)"></span>Smooth movement transition</div><div class="sub" style="margin-top:11px">Arrow direction = execution order. One transition can have multiple effects.</div></div>
+<div class="notice"><b>YOUR CANCEL LIST</b><div>Based on your updated INTO / OUT list, including Ninja Step → Ghost Greeting (recovery cancel). Repeated skill groups merged, blank entries ignored. Not independently verified.</div></div>
+</aside>
+<section class="canvas"><div class="canvas-top"><span class="pill" id="stats">— skills · — connections</span><span class="pill">Drag nodes · Scroll to zoom</span></div><div id="network"></div><div id="disabled">vis-network could not load. Open this file with an internet connection.</div><div class="canvas-bottom">Click a skill for incoming/outgoing · INTO + OUT draw as separate lines · arrows show execution order</div></section>
+<aside class="right"><div class="skillhead"><div class="sub">SELECTED SKILL</div><h3 id="skillName">Choose a skill</h3><span class="tag" id="skillGroup">Click a node</span></div>
+<div class="section"><h2>Incoming · what leads into this skill?</h2><div id="incoming" class="empty">Select a skill to see its connections.</div></div>
+<div class="section"><h2>Outgoing · what follows this skill?</h2><div id="outgoing" class="empty">Select a skill to see its connections.</div></div>
+<div class="section"><h2>What is the difference?</h2><div class="sub">An <b style="color:var(--green)">INTO cancel</b> speeds up the next skill's startup. An <b style="color:var(--red)">OUT cancel</b> interrupts the previous skill's animation. <b style="color:var(--blue)">Movement flow</b> means two skills transition smoothly, even without a true animation cancel.</div></div>
+</aside></main>
+<div class="modal" id="modal"><div class="dialog"><div class="bar"><div><h3>Edit graph data</h3><div class="mini">Edit skills and connections. Each edge can have multiple types.</div></div><button id="btnClose">✕ Close</button></div><textarea id="editor" spellcheck="false"></textarea><p id="error" class="error"></p><div class="buttons"><button id="btnApply">✓ Apply</button><button id="btnRestore">↻ Restore original list</button><button id="btnImport">↑ Import JSON</button></div><input type="file" id="fileInput" accept=".json,application/json" hidden><p class="status">Changes are kept for this session. Use Export JSON to save them permanently.</p></div></div>
+<script>
+// DATA: User-provided cancel list only; not independently verified.
+const initial={
+  "nodes": [
+    {
+      "id": "Dark Frenzy",
+      "group": "Combat"
+    },
+    {
+      "id": "Smokescreen",
+      "group": "Utility"
+    },
+    {
+      "id": "Fox Claw",
+      "group": "Combat"
+    },
+    {
+      "id": "Block Jump",
+      "group": "Movement"
+    },
+    {
+      "id": "Ghost Step",
+      "group": "Movement"
+    },
+    {
+      "id": "Shadow Stomp",
+      "group": "Combat"
+    },
+    {
+      "id": "Crescent Slash",
+      "group": "Combat"
+    },
+    {
+      "id": "Ninja Step",
+      "group": "Movement"
+    },
+    {
+      "id": "Malicious Cut (E Buff)",
+      "group": "Utility"
+    },
+    {
+      "id": "Beheading",
+      "group": "Combat"
+    },
+    {
+      "id": "Moonlight",
+      "group": "Combat"
+    },
+    {
+      "id": "Shadow Slash",
+      "group": "Combat"
+    },
+    {
+      "id": "Ankle Cutter",
+      "group": "Combat"
+    },
+    {
+      "id": "Shadow Clone",
+      "group": "Movement"
+    },
+    {
+      "id": "Alert Stance",
+      "group": "Movement"
+    },
+    {
+      "id": "Bladepin",
+      "group": "Utility"
+    },
+    {
+      "id": "Ghost Greeting",
+      "group": "Movement"
+    },
+    {
+      "id": "Cut Throat",
+      "group": "Combat"
+    },
+    {
+      "id": "Redrain",
+      "group": "Combat"
+    },
+    {
+      "id": "Fatal Blow",
+      "group": "Combat"
+    },
+    {
+      "id": "Fatal Blow Flow",
+      "group": "Combat"
+    },
+    {
+      "id": "Shackles",
+      "group": "Combat"
+    },
+    {
+      "id": "Shuriken Malice",
+      "group": "Utility"
+    },
+    {
+      "id": "Illusion of Restraint",
+      "group": "Combat"
+    },
+    {
+      "id": "Boss Slaughter",
+      "group": "Combat"
+    },
+    {
+      "id": "Bladespin",
+      "group": "Combat"
+    },
+    {
+      "id": "Evasive Shuriken Malice",
+      "group": "Utility"
+    },
+    {
+      "id": "Moon Dive",
+      "group": "Combat"
+    },
+    {
+      "id": "Heart Aiming",
+      "group": "Combat"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Dark Frenzy",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Dark Frenzy",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Dark Frenzy",
+      "to": "Block Jump",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Step",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Step",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Step",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Step",
+      "to": "Crescent Slash",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ninja Step",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ninja Step",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Malicious Cut (E Buff)",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Beheading",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Moonlight",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Block Jump",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Smokescreen",
+      "types": [
+        "into",
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Beheading",
+      "types": [
+        "into",
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Moonlight",
+      "types": [
+        "into",
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Crescent Slash",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Ankle Cutter",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Block Jump",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ankle Cutter",
+      "to": "Smokescreen",
+      "types": [
+        "into",
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Clone",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Beheading",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Moonlight",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Block Jump",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Alert Stance",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Bladepin",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Bladepin",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Greeting",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Greeting",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Greeting",
+      "to": "Moonlight",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ghost Greeting",
+      "to": "Beheading",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shadow Clone",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Cut Throat",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Cut Throat",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Block Jump",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow",
+      "to": "Ankle Cutter",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow Flow",
+      "to": "Fox Claw",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow Flow",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fatal Blow Flow",
+      "to": "Ankle Cutter",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shackles",
+      "to": "Smokescreen",
+      "types": [
+        "into",
+        "out"
+      ]
+    },
+    {
+      "from": "Fox Claw",
+      "to": "Moonlight",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fox Claw",
+      "to": "Beheading",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Fox Claw",
+      "to": "Smokescreen",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Shuriken Malice",
+      "to": "Ghost Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Ghost Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Block Jump",
+      "to": "Ghost Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Moonlight",
+      "to": "Ghost Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Beheading",
+      "to": "Ghost Step",
+      "types": [
+        "out"
+      ],
+      "note": "Only works with the non-cancelled version of Beheading (user note)."
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Illusion of Restraint",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Stomp",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shackles",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Fox Claw",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Beheading",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ],
+      "note": "Only works with the non-cancelled version of Beheading (user note)."
+    },
+    {
+      "from": "Moonlight",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Boss Slaughter",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Bladespin",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Dark Frenzy",
+      "to": "Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shuriken Malice",
+      "to": "Evasive Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Evasive Shuriken Malice",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Crescent Slash",
+      "to": "Smokescreen",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Block Jump",
+      "to": "Smokescreen",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Illusion of Restraint",
+      "to": "Smokescreen",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Moon Dive",
+      "to": "Smokescreen",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Fatal Blow",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Heart Aiming",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Ankle Cutter",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Smokescreen",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Illusion of Restraint",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Dark Frenzy",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Fox Claw",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Redrain",
+      "to": "Ninja Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Cut Throat",
+      "to": "Ninja Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Shadow Slash",
+      "to": "Ninja Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Fatal Blow",
+      "to": "Ninja Step",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Ninja Step",
+      "to": "Cut Throat",
+      "types": [
+        "out"
+      ]
+    },
+    {
+      "from": "Ghost Greeting",
+      "to": "Ankle Cutter",
+      "types": [
+        "into"
+      ]
+    },
+    {
+      "from": "Ninja Step",
+      "to": "Ghost Greeting",
+      "types": [
+        "out"
+      ],
+      "note": "Ghost Greeting slightly cuts off the ending animation of Ninja Step."
+    }
+  ]
+};
+let data=structuredClone(initial),network=null,selected=null,physics=true,mode='all';let activeRoute=null;
+const $=id=>document.getElementById(id);
+const color={into:'#42d99e',out:'#ff7386',flow:'#6daaff'};
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function visibleTypes(e){return e.types.filter(t=>$(t).checked)}
+function visibleEdges(){return data.edges.filter(e=>visibleTypes(e).length)}
+function edgeColor(e){const t=visibleTypes(e);return t.includes('into')&&t.includes('out')?'#f3c57b':color[t[0]]||'#63718b'}
+function edgeTitle(e){return `${e.from} → ${e.to}\n${e.types.map(t=>({into:'Cancel INTO (startup)',out:'Cancel OUT (recovery)',flow:'Movement flow'}[t])).join(' + ')}${e.note?'\n'+e.note:''}\nNot independently verified`}
+function graph(){if(typeof vis==='undefined'){ $('disabled').style.display='flex';return }if(network)network.destroy();const list=visibleEdges();const set=new Set(list.map(e=>JSON.stringify([e.from,e.to])));const gcolors={Movement:'#6daaff',Combat:'#db93e8',Utility:'#f1bf6d'};
+ const nodes=new vis.DataSet(data.nodes.map((n,i)=>({id:n.id,label:$('labels').checked?n.id:'',title:n.id,shape:'dot',size:n.group==='Movement'?12:10,color:{background:gcolors[n.group]||'#aeb8ce',border:'#d9e5fa',highlight:{background:'#fff',border:'#fff'}},font:{color:'#eaf2ff',size:12,strokeWidth:3,strokeColor:'#0b101b'},borderWidth:1.5})));
+ const expanded=list.flatMap(e=>visibleTypes(e).map(t=>({...e,displayType:t})));
+ const edgeKeys=new Set(expanded.map(e=>JSON.stringify([e.from,e.to])));
+ const edges=new vis.DataSet(expanded.map((e,i)=>{
+   const same=expanded.filter(x=>x.from===e.from&&x.to===e.to);
+   const hasReverse=edgeKeys.has(JSON.stringify([e.to,e.from]));
+   const bothTypes=same.length>1;
+   // Each effect is its own edge; bidirectional and dual-type edges remain visually separate.
+   const smooth=bothTypes?{enabled:true,type:e.displayType==='into'?'curvedCW':'curvedCCW',roundness:.22}:
+     hasReverse?{enabled:true,type:'curvedCW',roundness:.17}:{enabled:true,type:'dynamic',roundness:.08};
+   return {id:i,from:e.from,to:e.to,title:`${e.from} → ${e.to}\n${e.displayType==='into'?'Cancel INTO (startup)': 'Cancel OUT (recovery)'}${e.note?'\n'+e.note:''}\nBased on your own notes`,arrows:$('arrows').checked?{to:{enabled:true,scaleFactor:.65}}:'',color:{color:color[e.displayType],opacity:.83,highlight:'#ffffff',hover:'#ffffff'},width:2,smooth,selectionWidth:1.5};
+ }));
+ network=new vis.Network($('network'),{nodes,edges},{autoResize:true,interaction:{hover:true,tooltipDelay:120,keyboard:true},layout:{improvedLayout:false},physics:{enabled:physics,solver:'forceAtlas2Based',forceAtlas2Based:{gravitationalConstant:-65,centralGravity:.012,springLength:145,springConstant:.06,damping:.55,avoidOverlap:.55},stabilization:{enabled:true,iterations:260}},nodes:{chosen:true},edges:{chosen:true}});
+ network.on('click',p=>{if(p.nodes.length){selectSkill(p.nodes[0])}else{selectSkill(null)}});
+ network.once('stabilizationIterationsDone',()=>network.fit({animation:{duration:300}}));
+ $('stats').textContent=`${data.nodes.length} skills · ${list.length} connections`;
+ if(selected&&data.nodes.some(n=>n.id===selected))selectSkill(selected,false);else selectSkill(null,false);
+}
+function selectSkill(id,focus=true){selected=id;activeRoute=null;let node=data.nodes.find(n=>n.id===id);$('skillName').textContent=node?.id||'Choose a skill';$('skillGroup').textContent=node?.group||'Click a node';if(!node){$('incoming').className=$('outgoing').className='empty';$('incoming').textContent=$('outgoing').textContent='Select a skill to see its connections.';return;}
+ const incoming=visibleEdges().filter(e=>e.to===id),outgoing=visibleEdges().filter(e=>e.from===id);
+ showConnections('incoming',incoming,true);showConnections('outgoing',outgoing,false);
+ if(network){network.selectNodes([id]);if(focus)network.focus(id,{scale:1.15,animation:{duration:350}})}
+}
+function showConnections(target,connections,inc){let el=$(target);el.className='';if(!connections.length){el.className='empty';el.textContent='No visible connections.';return}el.innerHTML=connections.map(e=>`<div class="connection"><strong>${escapeHTML(inc?e.from:e.to)}</strong><small>${e.types.map(t=>`<span style="color:${color[t]}">${({into:'Cancel INTO',out:'Cancel OUT',flow:'Movement flow'}[t])}</span>`).join(' · ')}</small>${e.note?`<small>${escapeHTML(e.note)}</small>`:''}<button data-focus="${escapeHTML(inc?e.from:e.to)}">View skill →</button></div>`).join('');el.querySelectorAll('button[data-focus]').forEach(b=>b.addEventListener('click',()=>selectSkill(b.getAttribute('data-focus'))));}
+function populate(){const opts=data.nodes.map(n=>`<option value="${escapeHTML(n.id)}">${escapeHTML(n.id)}</option>`).join('');$('from').innerHTML=opts;$('to').innerHTML=opts;$('from').value=data.nodes.find(n=>n.id==='Ghost Step')?.id||data.nodes[0]?.id||'';$('to').value=data.nodes.find(n=>n.id==='Shadow Stomp')?.id||data.nodes.at(-1)?.id||''}
+function routeSearch(){let start=$('from').value,end=$('to').value,results=[],visited=new Set([start]);function dfs(path){if(results.length>=8)return;let last=path.at(-1);if(last===end){results.push([...path]);return}if(path.length>=7)return;for(const e of visibleEdges().filter(e=>e.from===last)){if(visited.has(e.to))continue;visited.add(e.to);dfs([...path,e.to]);visited.delete(e.to)}}dfs([start]);$('routes').innerHTML=results.length?`<div class="sub">${results.length}${results.length===8?'+':''} route(s), up to 6 transitions</div>`+results.map((r,i)=>`<div class="route">${r.map(escapeHTML).join(' → ')}<br><button data-path="${i}">Highlight route</button></div>`).join(''):'<div class="empty">No route found with the active filters.</div>'; $('routes').querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>{const p=results[Number(b.dataset.path)];network.selectNodes(p);network.selectEdges(network.body.data.edges.get().filter(e=>p.some((n,i)=>p[i+1]&&e.from===n&&e.to===p[i+1])).map(e=>e.id));network.fit({nodes:p,animation:true});}));}
+function validate(x){if(!x||!Array.isArray(x.nodes)||!Array.isArray(x.edges))throw Error('Use an object with nodes[] and edges[].');const ids=new Set();for(const n of x.nodes){if(typeof n.id!=='string'||!n.id.trim()||ids.has(n.id))throw Error('Each skill needs a unique non-empty id.');ids.add(n.id)}for(const e of x.edges){if(!ids.has(e.from)||!ids.has(e.to))throw Error(`Unknown skill in edge: ${e.from} → ${e.to}`);if(!Array.isArray(e.types)||!e.types.length||e.types.some(t=>!['into','out','flow'].includes(t)))throw Error('Use types: ["into"], ["out"] or ["flow"] (combinations allowed).');}return x}
+$('into').onchange=$('out').onchange=$('flow').onchange=$('labels').onchange=$('arrows').onchange=()=>{graph();$('routes').innerHTML=''};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));$('into').checked=mode!=='movement';$('out').checked=mode!=='movement';$('flow').checked=mode!=='cancels';graph();$('routes').innerHTML=''});
+$('search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();if(!q)return;const match=data.nodes.find(n=>n.id.toLowerCase().includes(q));if(match)selectSkill(match.id)});
+$('btnFit').onclick=()=>network?.fit({animation:true});$('btnPhysics').onclick=()=>{physics=!physics;$('btnPhysics').textContent=`◉ Physics: ${physics?'on':'off'}`;network?.setOptions({physics:{enabled:physics}})};$('btnReset').onclick=()=>{selected=null;$('search').value='';network?.unselectAll();selectSkill(null);network?.fit({animation:true})};$('btnRoutes').onclick=routeSearch;
+$('btnData').onclick=()=>{$('editor').value=JSON.stringify(data,null,2);$('error').textContent='';$('modal').classList.add('show')};$('btnClose').onclick=()=>{$('modal').classList.remove('show')};$('btnApply').onclick=()=>{try{data=validate(JSON.parse($('editor').value));$('modal').classList.remove('show');selected=null;populate();graph();$('routes').innerHTML=''}catch(e){$('error').textContent=e.message}};$('btnRestore').onclick=()=>{$('editor').value=JSON.stringify(initial,null,2);$('error').textContent=''};
+$('btnExport').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='succ-ninja-cancels.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('btnImport').onclick=()=>$('fileInput').click();$('fileInput').onchange=async e=>{const f=e.target.files[0];if(f)$('editor').value=await f.text();e.target.value=''};
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))$('modal').classList.remove('show')});document.addEventListener('keydown',e=>{if(e.key==='Escape')$('modal').classList.remove('show')});
+populate();graph();
+</script></body></html>
