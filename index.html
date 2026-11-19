@@ -3,29 +3,29 @@
 <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
 :root{color-scheme:dark;--bg:#0c101a;--panel:#141b29;--panel2:#1a2334;--border:#2a354b;--text:#edf2fc;--muted:#93a4c1;--green:#42d99e;--red:#ff7386;--blue:#6daaff;--gold:#f4c579}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,Arial}button,input,select,textarea{font:inherit}button{cursor:pointer;color:var(--text);border:1px solid var(--border);border-radius:9px;background:var(--panel2);padding:8px 11px}button:hover{border-color:#547195;background:#243147}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #8fbdff}header{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:center;background:#101725}header h1{margin:0;font-size:17px;letter-spacing:-.3px}header small{color:var(--muted);display:block;font-size:11px;margin-top:2px}header .actions{display:flex;gap:7px;flex-wrap:wrap}main{display:grid;grid-template-columns:265px minmax(300px,1fr) 305px;min-height:calc(100vh - 70px)}aside{background:var(--panel);padding:17px;overflow:auto}aside.left{border-right:1px solid var(--border)}aside.right{border-left:1px solid var(--border)}.section{margin-bottom:24px}.section h2{font-size:11px;letter-spacing:1.2px;color:#8d9fb9;text-transform:uppercase;margin:0 0 13px}.check{display:flex;gap:10px;align-items:center;padding:8px 4px;cursor:pointer}.check input{accent-color:#73aafa;width:15px;height:15px}.dot{width:9px;height:9px;display:inline-block;border-radius:20px;flex-shrink:0}.check .hint{color:var(--muted);font-size:11px;margin-left:auto}.sub{font-size:12px;color:var(--muted)}.field{display:block;width:100%;background:#0e1421;color:var(--text);border:1px solid #32415a;border-radius:8px;padding:10px;margin:8px 0}.full{width:100%}.canvas{position:relative;min-height:620px;background:radial-gradient(ellipse at 50% 48%,#182238 0%,#0b111c 76%)}#network{position:absolute;inset:0}.canvas-top{position:absolute;z-index:1;pointer-events:none;top:15px;left:16px;display:flex;gap:8px;flex-wrap:wrap}.pill{font-size:11px;border:1px solid #334158;border-radius:20px;background:#111a28df;color:#aebdd3;padding:6px 10px}.canvas-bottom{position:absolute;z-index:1;pointer-events:none;left:16px;bottom:14px;color:#8092ac;font-size:11px}.skillhead{border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:17px}h3{margin:0 0 6px;font-size:21px;letter-spacing:-.5px}.tag{display:inline-block;border:1px solid #3d4b66;color:#a8b9d5;border-radius:20px;padding:3px 9px;font-size:11px}.connection{background:#111927;border:1px solid var(--border);padding:11px;margin:8px 0;border-radius:10px}.connection strong{display:block;font-size:12px}.connection small{display:block;color:var(--muted);margin-top:3px;font-size:11px}.connection button{margin-top:8px;font-size:11px;padding:4px 8px}.empty{color:#7f91af;font-size:12px;padding:12px;background:#101725;border:1px dashed #344057;border-radius:9px}.mini{font-size:11px;color:var(--muted)}.route{margin:7px 0;padding:10px;background:#101725;border:1px solid #2d3c53;border-radius:8px;font-size:12px;line-height:1.7}.route button{font-size:11px;padding:3px 7px;margin-top:6px}.header2{font-size:14px;font-weight:700;margin:0 0 8px}.legend{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:12px;color:#aebdd3}.line{height:2px;width:24px}.notice{border:1px solid #635035;color:#e6c591;background:#292114;padding:11px;border-radius:9px;font-size:11px}.modal{position:fixed;inset:0;z-index:20;background:#05070ad9;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.dialog{background:var(--panel);border:1px solid #44546c;max-width:790px;width:100%;border-radius:14px;padding:20px}.dialog textarea{width:100%;height:320px;resize:vertical;background:#090e18;color:#d8eaff;border:1px solid #384862;border-radius:8px;padding:13px;font:12px/1.6 ui-monospace,Consolas,monospace}.dialog .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.dialog .bar h3{font-size:17px}.error{color:#ff8392;font-size:12px;min-height:18px}.buttons{display:flex;gap:7px;flex-wrap:wrap}.routeResults{margin-top:14px}.status{font-size:11px;color:var(--muted);margin-top:7px}.mode{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.mode button{font-size:11px;padding:9px 4px}.mode button.active{background:#29446b;border-color:#6aa6fc;color:#e8f1ff}#disabled{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:#0b111c;color:#f7d7a1;z-index:5;text-align:center;padding:20px}@media(max-width:1020px){main{grid-template-columns:220px minmax(280px,1fr)}aside.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--border)}.canvas{min-height:570px}}@media(max-width:640px){main{display:flex;flex-direction:column}aside.left{order:1;border-right:0;border-bottom:1px solid var(--border)}.canvas{order:2;min-height:450px}.right{order:3}header{align-items:start;flex-direction:column}.section{margin-bottom:14px}.check{display:inline-flex;margin-right:10px}}
-</style></head><body>
+.effect{display:flex;align-items:flex-start;gap:9px;margin-top:9px}.effect-dot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px}.effect b{font-size:10px;letter-spacing:.5px}.effect-detail{font-size:11px;color:#ced8e8;line-height:1.45;margin-top:2px}.connection .edge-note{border-top:1px solid #304057;margin-top:9px;padding-top:7px;color:#f2cc8e}</style></head><body>
 <header><div><h1>◈ Succ Ninja <span style="color:#78aaff">Cancel Lab</span></h1><small>Skills · animation cancels · movement chains · interactive graph</small></div><div class="actions"><button id="btnFit">⊞ Fit</button><button id="btnPhysics">◉ Physics: on</button><button id="btnData">{ } Edit data</button><button id="btnExport">↓ Export JSON</button></div></header>
 <main><aside class="left">
 <div class="section"><h2>View</h2><div class="mode"><button class="active" data-mode="all">All</button><button data-mode="cancels">Cancels</button><button data-mode="movement">Movement</button></div></div>
 <div class="section"><h2>Filter connections</h2>
-<label class="check"><input type="checkbox" id="into" checked><i class="dot" style="background:var(--green)"></i>Cancel into <span class="hint">startup</span></label>
-<label class="check"><input type="checkbox" id="out" checked><i class="dot" style="background:var(--red)"></i>Cancel out <span class="hint">recovery</span></label>
+<label class="check"><input type="checkbox" id="into" checked><i class="dot" style="background:var(--green)"></i>Start Cancel <span class="hint">next skill</span></label>
+<label class="check"><input type="checkbox" id="out" checked><i class="dot" style="background:var(--red)"></i>End Cancel <span class="hint">previous skill</span></label>
 <label class="check"><input type="checkbox" id="flow" checked><i class="dot" style="background:var(--blue)"></i>Movement flow <span class="hint">chain</span></label>
 <label class="check"><input type="checkbox" id="labels" checked>Show skill names</label>
 <label class="check"><input type="checkbox" id="arrows" checked>Show arrows</label>
 </div>
 <div class="section"><h2>Find skill</h2><input class="field" id="search" placeholder="e.g. Ghost Step…"><button id="btnReset" class="full">Clear selection</button></div>
 <div class="section"><h2>Find chains</h2><select id="from" class="field"></select><select id="to" class="field"></select><button id="btnRoutes" class="full">Find chains →</button><div id="routes" class="routeResults"></div></div>
-<div class="section"><h2>Legend</h2><div class="legend"><span class="line" style="background:var(--green)"></span>Speeds up next skill startup</div><div class="legend"><span class="line" style="background:var(--red)"></span>Interrupts previous skill</div><div class="legend"><span class="line" style="background:var(--blue)"></span>Smooth movement transition</div><div class="sub" style="margin-top:11px">Arrow direction = execution order. One transition can have multiple effects.</div></div>
-<div class="notice"><b>YOUR CANCEL LIST</b><div>Based on your updated INTO / OUT list, including Ninja Step → Ghost Greeting (recovery cancel). Repeated skill groups merged, blank entries ignored. Not independently verified.</div></div>
+<div class="section"><h2>Legend</h2><div class="legend"><span class="line" style="background:var(--green)"></span>Cancels start of next skill</div><div class="legend"><span class="line" style="background:var(--red)"></span>Cancels end of previous skill</div><div class="legend"><span class="line" style="background:var(--blue)"></span>Smooth movement transition</div><div class="sub" style="margin-top:11px">Arrows always show execution order. A transition may cancel both the end of one skill and the start of the next.</div></div>
+<div class="notice"><b>YOUR CANCEL LIST</b><div>Based on your saved cancel list, including Heart Aiming → Shadow Stomp (Start Cancel), Heart Aiming → Cut Throat (End Cancel), and Heart Aiming → Fatal Blow (End Cancel). Repeated skill groups merged, blank entries ignored. Not independently verified.</div></div>
 </aside>
-<section class="canvas"><div class="canvas-top"><span class="pill" id="stats">— skills · — connections</span><span class="pill">Drag nodes · Scroll to zoom</span></div><div id="network"></div><div id="disabled">vis-network could not load. Open this file with an internet connection.</div><div class="canvas-bottom">Click a skill for incoming/outgoing · INTO + OUT draw as separate lines · arrows show execution order</div></section>
+<section class="canvas"><div class="canvas-top"><span class="pill" id="stats">— skills · — connections</span><span class="pill">Drag nodes · Scroll to zoom</span></div><div id="network"></div><div id="disabled">vis-network could not load. Open this file with an internet connection.</div><div class="canvas-bottom">Click a skill to see what comes before or after · Start + End effects use separate arrows</div></section>
 <aside class="right"><div class="skillhead"><div class="sub">SELECTED SKILL</div><h3 id="skillName">Choose a skill</h3><span class="tag" id="skillGroup">Click a node</span></div>
-<div class="section"><h2>Incoming · what leads into this skill?</h2><div id="incoming" class="empty">Select a skill to see its connections.</div></div>
-<div class="section"><h2>Outgoing · what follows this skill?</h2><div id="outgoing" class="empty">Select a skill to see its connections.</div></div>
-<div class="section"><h2>What is the difference?</h2><div class="sub">An <b style="color:var(--green)">INTO cancel</b> speeds up the next skill's startup. An <b style="color:var(--red)">OUT cancel</b> interrupts the previous skill's animation. <b style="color:var(--blue)">Movement flow</b> means two skills transition smoothly, even without a true animation cancel.</div></div>
+<div class="section"><h2>Before This Skill</h2><p class="sub" style="margin:-6px 0 10px">Skills you can perform first. Each card shows exactly which animation is shortened.</p><div id="incoming" class="empty">Select a skill to see its connections.</div></div>
+<div class="section"><h2>After This Skill</h2><p class="sub" style="margin:-6px 0 10px">Possible next skills and what their transitions cancel.</p><div id="outgoing" class="empty">Select a skill to see its connections.</div></div>
+<div class="section"><h2>What is the difference?</h2><div class="sub">A <b style="color:var(--green)">Start Cancel</b> shortens the start of the next skill. An <b style="color:var(--red)">End Cancel</b> shortens the end of the previous skill. <b style="color:var(--blue)">Movement flow</b> means two skills transition smoothly, even without a true animation cancel.</div></div>
 </aside></main>
-<div class="modal" id="modal"><div class="dialog"><div class="bar"><div><h3>Edit graph data</h3><div class="mini">Edit skills and connections. Each edge can have multiple types.</div></div><button id="btnClose">✕ Close</button></div><textarea id="editor" spellcheck="false"></textarea><p id="error" class="error"></p><div class="buttons"><button id="btnApply">✓ Apply</button><button id="btnRestore">↻ Restore original list</button><button id="btnImport">↑ Import JSON</button></div><input type="file" id="fileInput" accept=".json,application/json" hidden><p class="status">Changes are kept for this session. Use Export JSON to save them permanently.</p></div></div>
+<div class="modal" id="modal"><div class="dialog"><div class="bar"><div><h3>Edit graph data</h3><div class="mini">Edit skills and connections. Edit skills and skill transitions. JSON retains the types "into" and "out" for compatibility with your old data.</div></div><button id="btnClose">✕ Close</button></div><textarea id="editor" spellcheck="false"></textarea><p id="error" class="error"></p><div class="buttons"><button id="btnApply">✓ Apply</button><button id="btnRestore">↻ Restore original list</button><button id="btnImport">↑ Import JSON</button></div><input type="file" id="fileInput" accept=".json,application/json" hidden><p class="status">Changes are kept for this session. Use Export JSON to save them permanently.</p></div></div>
 <script>
 // DATA: User-provided cancel list only; not independently verified.
 const initial={
@@ -124,10 +124,6 @@ const initial={
     },
     {
       "id": "Illusion of Restraint",
-      "group": "Combat"
-    },
-    {
-      "id": "Boss Slaughter",
       "group": "Combat"
     },
     {
@@ -597,13 +593,6 @@ const initial={
       ]
     },
     {
-      "from": "Boss Slaughter",
-      "to": "Shuriken Malice",
-      "types": [
-        "out"
-      ]
-    },
-    {
       "from": "Redrain",
       "to": "Shuriken Malice",
       "types": [
@@ -778,6 +767,22 @@ const initial={
         "out"
       ],
       "note": "Ghost Greeting slightly cuts off the ending animation of Ninja Step."
+    },
+    {
+      "from": "Heart Aiming",
+      "to": "Shadow Stomp",
+      "types": [
+        "into"
+      ],
+      "note": "Heart Aiming shortens Shadow Stomp startup (user observation)."
+    },
+    {
+      "from": "Heart Aiming",
+      "to": "Fatal Blow",
+      "types": [
+        "out"
+      ],
+      "note": "Fatal Blow cancels the ending animation of Heart Aiming (user observation)."
     }
   ]
 };
@@ -788,7 +793,7 @@ const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 function visibleTypes(e){return e.types.filter(t=>$(t).checked)}
 function visibleEdges(){return data.edges.filter(e=>visibleTypes(e).length)}
 function edgeColor(e){const t=visibleTypes(e);return t.includes('into')&&t.includes('out')?'#f3c57b':color[t[0]]||'#63718b'}
-function edgeTitle(e){return `${e.from} → ${e.to}\n${e.types.map(t=>({into:'Cancel INTO (startup)',out:'Cancel OUT (recovery)',flow:'Movement flow'}[t])).join(' + ')}${e.note?'\n'+e.note:''}\nNot independently verified`}
+function edgeTitle(e){return `${e.from} → ${e.to}\n${e.types.map(t=>({into:'Start Cancel — shortens next skill startup',out:'End Cancel — shortens previous skill ending',flow:'Movement flow'}[t])).join(' + ')}${e.note?'\n'+e.note:''}\nNot independently verified`}
 function graph(){if(typeof vis==='undefined'){ $('disabled').style.display='flex';return }if(network)network.destroy();const list=visibleEdges();const set=new Set(list.map(e=>JSON.stringify([e.from,e.to])));const gcolors={Movement:'#6daaff',Combat:'#db93e8',Utility:'#f1bf6d'};
  const nodes=new vis.DataSet(data.nodes.map((n,i)=>({id:n.id,label:$('labels').checked?n.id:'',title:n.id,shape:'dot',size:n.group==='Movement'?12:10,color:{background:gcolors[n.group]||'#aeb8ce',border:'#d9e5fa',highlight:{background:'#fff',border:'#fff'}},font:{color:'#eaf2ff',size:12,strokeWidth:3,strokeColor:'#0b101b'},borderWidth:1.5})));
  const expanded=list.flatMap(e=>visibleTypes(e).map(t=>({...e,displayType:t})));
@@ -800,7 +805,7 @@ function graph(){if(typeof vis==='undefined'){ $('disabled').style.display='flex
    // Each effect is its own edge; bidirectional and dual-type edges remain visually separate.
    const smooth=bothTypes?{enabled:true,type:e.displayType==='into'?'curvedCW':'curvedCCW',roundness:.22}:
      hasReverse?{enabled:true,type:'curvedCW',roundness:.17}:{enabled:true,type:'dynamic',roundness:.08};
-   return {id:i,from:e.from,to:e.to,title:`${e.from} → ${e.to}\n${e.displayType==='into'?'Cancel INTO (startup)': 'Cancel OUT (recovery)'}${e.note?'\n'+e.note:''}\nBased on your own notes`,arrows:$('arrows').checked?{to:{enabled:true,scaleFactor:.65}}:'',color:{color:color[e.displayType],opacity:.83,highlight:'#ffffff',hover:'#ffffff'},width:2,smooth,selectionWidth:1.5};
+   return {id:i,from:e.from,to:e.to,title:`${e.from} → ${e.to}\n${e.displayType==='into'?'Start Cancel — next skill starts faster': e.displayType==='out'?'End Cancel — previous skill ends early':'Movement flow'}${e.note?'\n'+e.note:''}\nBased on your own notes`,arrows:$('arrows').checked?{to:{enabled:true,scaleFactor:.65}}:'',color:{color:color[e.displayType],opacity:.83,highlight:'#ffffff',hover:'#ffffff'},width:2,smooth,selectionWidth:1.5};
  }));
  network=new vis.Network($('network'),{nodes,edges},{autoResize:true,interaction:{hover:true,tooltipDelay:120,keyboard:true},layout:{improvedLayout:false},physics:{enabled:physics,solver:'forceAtlas2Based',forceAtlas2Based:{gravitationalConstant:-65,centralGravity:.012,springLength:145,springConstant:.06,damping:.55,avoidOverlap:.55},stabilization:{enabled:true,iterations:260}},nodes:{chosen:true},edges:{chosen:true}});
  network.on('click',p=>{if(p.nodes.length){selectSkill(p.nodes[0])}else{selectSkill(null)}});
@@ -813,7 +818,21 @@ function selectSkill(id,focus=true){selected=id;activeRoute=null;let node=data.n
  showConnections('incoming',incoming,true);showConnections('outgoing',outgoing,false);
  if(network){network.selectNodes([id]);if(focus)network.focus(id,{scale:1.15,animation:{duration:350}})}
 }
-function showConnections(target,connections,inc){let el=$(target);el.className='';if(!connections.length){el.className='empty';el.textContent='No visible connections.';return}el.innerHTML=connections.map(e=>`<div class="connection"><strong>${escapeHTML(inc?e.from:e.to)}</strong><small>${e.types.map(t=>`<span style="color:${color[t]}">${({into:'Cancel INTO',out:'Cancel OUT',flow:'Movement flow'}[t])}</span>`).join(' · ')}</small>${e.note?`<small>${escapeHTML(e.note)}</small>`:''}<button data-focus="${escapeHTML(inc?e.from:e.to)}">View skill →</button></div>`).join('');el.querySelectorAll('button[data-focus]').forEach(b=>b.addEventListener('click',()=>selectSkill(b.getAttribute('data-focus'))));}
+function describeEffect(type,previous,next){
+ if(type==='into')return `${next} starts faster (its startup is shortened).`;
+ if(type==='out')return `${previous} ends earlier (its ending animation is cut short).`;
+ return `${previous} flows smoothly into ${next}.`;
+}
+function showConnections(target,connections,inc){
+ let el=$(target);el.className='';
+ if(!connections.length){el.className='empty';el.textContent='No visible transitions for this skill.';return}
+ el.innerHTML=connections.map(e=>{
+  const other=inc?e.from:e.to;
+  const effects=visibleTypes(e).map(t=>`<div class="effect"><span class="effect-dot" style="background:${color[t]}"></span><div><b style="color:${color[t]}">${({into:'START CANCEL',out:'END CANCEL',flow:'MOVEMENT FLOW'}[t])}</b><div class="effect-detail">${escapeHTML(describeEffect(t,e.from,e.to))}</div></div></div>`).join('');
+  return `<div class="connection"><strong>${escapeHTML(e.from)} → ${escapeHTML(e.to)}</strong><small>${inc?'Previous skill':'Next skill'}: ${escapeHTML(other)}</small>${effects}${e.note?`<small class="edge-note">${escapeHTML(e.note)}</small>`:''}<button data-focus="${escapeHTML(other)}">View ${escapeHTML(other)} →</button></div>`
+ }).join('');
+ el.querySelectorAll('button[data-focus]').forEach(b=>b.addEventListener('click',()=>selectSkill(b.getAttribute('data-focus'))));
+}
 function populate(){const opts=data.nodes.map(n=>`<option value="${escapeHTML(n.id)}">${escapeHTML(n.id)}</option>`).join('');$('from').innerHTML=opts;$('to').innerHTML=opts;$('from').value=data.nodes.find(n=>n.id==='Ghost Step')?.id||data.nodes[0]?.id||'';$('to').value=data.nodes.find(n=>n.id==='Shadow Stomp')?.id||data.nodes.at(-1)?.id||''}
 function routeSearch(){let start=$('from').value,end=$('to').value,results=[],visited=new Set([start]);function dfs(path){if(results.length>=8)return;let last=path.at(-1);if(last===end){results.push([...path]);return}if(path.length>=7)return;for(const e of visibleEdges().filter(e=>e.from===last)){if(visited.has(e.to))continue;visited.add(e.to);dfs([...path,e.to]);visited.delete(e.to)}}dfs([start]);$('routes').innerHTML=results.length?`<div class="sub">${results.length}${results.length===8?'+':''} route(s), up to 6 transitions</div>`+results.map((r,i)=>`<div class="route">${r.map(escapeHTML).join(' → ')}<br><button data-path="${i}">Highlight route</button></div>`).join(''):'<div class="empty">No route found with the active filters.</div>'; $('routes').querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>{const p=results[Number(b.dataset.path)];network.selectNodes(p);network.selectEdges(network.body.data.edges.get().filter(e=>p.some((n,i)=>p[i+1]&&e.from===n&&e.to===p[i+1])).map(e=>e.id));network.fit({nodes:p,animation:true});}));}
 function validate(x){if(!x||!Array.isArray(x.nodes)||!Array.isArray(x.edges))throw Error('Use an object with nodes[] and edges[].');const ids=new Set();for(const n of x.nodes){if(typeof n.id!=='string'||!n.id.trim()||ids.has(n.id))throw Error('Each skill needs a unique non-empty id.');ids.add(n.id)}for(const e of x.edges){if(!ids.has(e.from)||!ids.has(e.to))throw Error(`Unknown skill in edge: ${e.from} → ${e.to}`);if(!Array.isArray(e.types)||!e.types.length||e.types.some(t=>!['into','out','flow'].includes(t)))throw Error('Use types: ["into"], ["out"] or ["flow"] (combinations allowed).');}return x}
